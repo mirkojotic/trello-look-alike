@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Sun Aug 20 14:23:43 EDT 2017:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.13.1.1 - (1765088): instance a816c00e-015e-00e2-e6ba-000002a4be28 
+on database directory memory:/home/mirko/Desktop/workspace_spring/trello-look-alike/testdb with class loader sun.misc.Launcher$AppClassLoader@6f496d9f 
+Loaded from file:/home/mirko/.m2/repository/org/apache/derby/derby/10.13.1.1/derby-10.13.1.1.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_131-8u131-b11-2ubuntu1.17.04.3-b11
+user.dir=/home/mirko/Desktop/workspace_spring/trello-look-alike
+os.name=Linux
+os.arch=amd64
+os.version=4.10.0-32-generic
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
