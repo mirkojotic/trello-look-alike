@@ -49,7 +49,11 @@ public class ProjectControllerTest {
 				.andExpect(status().is2xxSuccessful())
 				.andReturn();
 		String jsonResponse = result.getResponse().getContentAsString();
-		assert(jsonResponse.contains("{\"uuid\":\""+p.getUuid()+"\",\"name\":\"Super duper Project\",\"description\":\"Some description\"}"));
+		Project projectFromJson = new ObjectMapper().readValue(jsonResponse, Project.class);
+	
+		assert(projectFromJson.getUuid().equals(p.getUuid()));
+		assert(projectFromJson.getName().equals("Super duper Project"));
+		assert(projectFromJson.getDescription().equals("Some description"));
 	}
 	
 	@Test
