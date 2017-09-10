@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -29,13 +30,14 @@ public class LaneControllerTest {
 	private ProjectService projectService;
 	
 	@Test
+	@WithMockUser
 	public void createLaneBelongingToOneProject() throws Exception {
 		// create a project
 		Project project = new Project("Super duper Project", "Some description");
 		Project p = projectService.addProject(project);
 	
 		// create a lane
-		MvcResult result = mockMvc.perform(post("/projects/" + p.getUuid() + "/lanes")
+		MvcResult result = mockMvc.perform(post("/api/projects/" + p.getUuid() + "/lanes")
 					.contentType("application/json")
 					.content("{\"name\":\"Test\",\"description\":\"Testing\"}"))
 				.andExpect(status().is2xxSuccessful())
@@ -52,13 +54,14 @@ public class LaneControllerTest {
 	}
 
 	@Test
+	@WithMockUser
 	public void assertProjectHasLanesAssociatedWithIt() throws Exception {
 		// create a project
 		Project project = new Project("Super duper Project", "Some description");
 		Project p = projectService.addProject(project);
 	
 		// create a lane
-		MvcResult resultLane = mockMvc.perform(post("/projects/" + p.getUuid() + "/lanes")
+		MvcResult resultLane = mockMvc.perform(post("/api/projects/" + p.getUuid() + "/lanes")
 					.contentType("application/json")
 					.content("{\"name\":\"Test\",\"description\":\"Testing\"}"))
 				.andExpect(status().is2xxSuccessful())
@@ -66,7 +69,7 @@ public class LaneControllerTest {
 		String laneResponse = resultLane.getResponse().getContentAsString();
 		Lane lane = new ObjectMapper().readValue(laneResponse, Lane.class);
 		
-		MvcResult result = mockMvc.perform(get("/projects/" + p.getUuid()))
+		MvcResult result = mockMvc.perform(get("/api/projects/" + p.getUuid()))
 									.andExpect(status().is2xxSuccessful())
 									.andReturn();
 		

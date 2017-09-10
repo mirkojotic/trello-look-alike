@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @RestController
+@RequestMapping("/api/projects/{projectUuid}/lanes")
 public class LaneController {
 
     public static final Logger logger = LoggerFactory.getLogger(LaneController.class);
@@ -26,12 +27,12 @@ public class LaneController {
 	@Autowired
 	private ProjectService projectService;
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/projects/{projectUuid}/lanes")
+	@RequestMapping(method = RequestMethod.GET)
 	public List<Lane> getAllLanes(@PathVariable String projectUuid) {
 		return laneService.getAll(projectUuid);
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value = "/projects/{projectUuid}/lanes")
+	@RequestMapping(method = RequestMethod.POST)
 	public Lane saveLane(@PathVariable String projectUuid, @RequestBody Lane lane) {
 		Project project = projectService.getProject(projectUuid);
 		lane.setProject(project);
