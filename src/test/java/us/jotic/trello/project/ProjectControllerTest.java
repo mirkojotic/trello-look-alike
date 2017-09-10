@@ -5,12 +5,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -29,8 +29,9 @@ public class ProjectControllerTest {
 	private ProjectService projectService;
 	
 	@Test
+	@WithMockUser
 	public void testShouldAddProject() throws Exception {
-		MvcResult result = mockMvc.perform(post("/projects")
+		MvcResult result = mockMvc.perform(post("/api/projects")
 					.contentType("application/json")
 					.content("{\"name\":\"Test\",\"description\":\"Testing\"}"))
 				.andExpect(status().is2xxSuccessful())
@@ -41,11 +42,12 @@ public class ProjectControllerTest {
 	}
 	
 	@Test
+	@WithMockUser
 	public void testShouldGetProject() throws Exception {
 		Project project = new Project("Super duper Project", "Some description");
 		Project p = projectService.addProject(project);
 		
-		MvcResult result = mockMvc.perform(get("/projects/" + p.getUuid()))
+		MvcResult result = mockMvc.perform(get("/api/projects/" + p.getUuid()))
 				.andExpect(status().is2xxSuccessful())
 				.andReturn();
 		String jsonResponse = result.getResponse().getContentAsString();
@@ -57,13 +59,14 @@ public class ProjectControllerTest {
 	}
 	
 	@Test
+	@WithMockUser
 	public void testShouldUpdateProject() throws Exception {
 		Project project = new Project("Testing", "Test description");
 		Project p = projectService.addProject(project);
 		
 		String body = "{\"uuid\":\"" + p.getUuid() + "\",\"name\":\"Updated testing\",\"description\":\"Updated Description\"}";
 		
-		MvcResult result = mockMvc.perform(put("/projects/" + p.getUuid()).contentType("application/json").content(body))
+		MvcResult result = mockMvc.perform(put("/api/projects/" + p.getUuid()).contentType("application/json").content(body))
 									.andExpect(status().is2xxSuccessful())
 									.andReturn();
 		
