@@ -18,7 +18,7 @@ import us.jotic.trello.lane.Lane;
 
 
 @Entity
-@Table(name = "project")
+@Table(name = "projects")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "uuid")
 public class Project {
 
