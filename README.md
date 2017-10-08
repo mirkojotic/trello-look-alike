@@ -1,3 +1,3 @@
 # Trello Look Alike
 
-Practice project for learning Java & Spring
+Project to follow a (blog)[https://jotic.us] about a simple Java Spring REST API
