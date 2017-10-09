@@ -1,7 +1,11 @@
 package us.jotic.trello.project;
 
 import java.security.Principal;
+
 import java.util.List;
+
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +31,7 @@ public class ProjectController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public Project addProject(@RequestBody Project project) {
+	public Project addProject(@Valid @RequestBody Project project) {
 		logger.info("Creating project {}", project);
 		return projectService.addProject(project);
 	}
@@ -38,7 +42,7 @@ public class ProjectController {
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "/{uuid}")
-	public Project updateProject(@PathVariable String uuid, @RequestBody Project project) {
+	public Project updateProject(@Valid @RequestBody Project project, @PathVariable String uuid) {
 		logger.info("Update project {}", project);
 		return projectService.updateProject(project);
 	}

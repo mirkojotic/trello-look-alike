@@ -39,7 +39,7 @@ public class LaneControllerTest {
 		// create a lane
 		MvcResult result = mockMvc.perform(post("/api/projects/" + p.getUuid() + "/lanes")
 					.contentType("application/json")
-					.content("{\"name\":\"Test\",\"description\":\"Testing\"}"))
+					.content("{\"name\":\"Testing\",\"description\":\"Testing, testing\"}"))
 				.andExpect(status().is2xxSuccessful())
 				.andReturn();
 		
@@ -47,8 +47,8 @@ public class LaneControllerTest {
 		Lane laneFromJson = new ObjectMapper().readValue(jsonResponse, Lane.class);
 	
 		// assert returned lane object has everything it has to have
-		assert(laneFromJson.getName().equals("Test"));
-		assert(laneFromJson.getDescription().equals("Testing"));
+		assert(laneFromJson.getName().equals("Testing"));
+		assert(laneFromJson.getDescription().equals("Testing, testing"));
 		// assert relationship with project was established
 		assert(laneFromJson.getProject().getUuid().equals(p.getUuid()));
 	}
@@ -63,7 +63,7 @@ public class LaneControllerTest {
 		// create a lane
 		MvcResult resultLane = mockMvc.perform(post("/api/projects/" + p.getUuid() + "/lanes")
 					.contentType("application/json")
-					.content("{\"name\":\"Test\",\"description\":\"Testing\"}"))
+					.content("{\"name\":\"Testing\",\"description\":\"Satisfying length constraint\"}"))
 				.andExpect(status().is2xxSuccessful())
 				.andReturn();
 		String laneResponse = resultLane.getResponse().getContentAsString();
@@ -80,4 +80,45 @@ public class LaneControllerTest {
 		assert(projectFromJson.getLanes().get(0).getUuid().equals(lane.getUuid()));
 	}
 	
+	@Test
+	@WithMockUser
+	public void assertPostFailsWithValidationMessages() throws Exception {
+		
+		Project project = new Project("Super duper Project", "Some description");
+		Project p = projectService.addProject(project);
+		
+		// create a lane
+		MvcResult result = mockMvc.perform(post("/api/projects/" + p.getUuid() + "/lanes")
+					.contentType("application/json")
+					.content("{\"name\":\"Test\",\"description\":\"Test\"}"))
+				.andExpect(status().is4xxClientError())
+				.andReturn();
+		
+		String jsonResponse = result.getResponse().getContentAsString();
+		
+		assert(jsonResponse.contains("{\"field\":\"name\",\"message\":\"size must be between 5 and 20\"}"));
+		assert(jsonResponse.contains("{\"field\":\"description\",\"message\":\"size must be between 10 and 500\"}"));
+		
+	}
+	
+	@Test
+	@WithMockUser
+	public void assertPostFailsWithValidationMessagesIfFieldsAreMissing() throws Exception {
+		
+		Project project = new Project("Super duper Project", "Some description");
+		Project p = projectService.addProject(project);
+		
+		// create a lane
+		MvcResult result = mockMvc.perform(post("/api/projects/" + p.getUuid() + "/lanes")
+					.contentType("application/json")
+					.content("{\"name\":\"Test\"}"))
+				.andExpect(status().is4xxClientError())
+				.andReturn();
+		
+		String jsonResponse = result.getResponse().getContentAsString();
+		
+		assert(jsonResponse.contains("{\"field\":\"name\",\"message\":\"size must be between 5 and 20\"}"));
+		assert(jsonResponse.contains("{\"field\":\"description\",\"message\":\"may not be null\"}"));
+		
+	}
 }

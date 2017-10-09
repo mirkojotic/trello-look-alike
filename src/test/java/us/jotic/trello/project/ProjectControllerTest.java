@@ -31,14 +31,47 @@ public class ProjectControllerTest {
 	@Test
 	@WithMockUser
 	public void testShouldAddProject() throws Exception {
+		
 		MvcResult result = mockMvc.perform(post("/api/projects")
 					.contentType("application/json")
-					.content("{\"name\":\"Test\",\"description\":\"Testing\"}"))
+					.content("{\"name\":\"Testing\",\"description\":\"My supper cool fancy project\"}"))
 				.andExpect(status().is2xxSuccessful())
 				.andReturn();
 		
 		String jsonResponse = result.getResponse().getContentAsString();
-		assert(jsonResponse.contains("\"name\":\"Test\",\"description\":\"Testing\""));
+		assert(jsonResponse.contains("\"name\":\"Testing\",\"description\":\"My supper cool fancy project\""));
+	}
+	
+	@Test
+	@WithMockUser
+	public void testFailWithValidationMessages() throws Exception {
+		
+		MvcResult result = mockMvc.perform(post("/api/projects")
+					.contentType("application/json")
+					.content("{\"name\":\"Test\",\"description\":\"Testing\"}"))
+				.andExpect(status().is4xxClientError())
+				.andReturn();
+		
+		String jsonResponse = result.getResponse().getContentAsString();
+		
+		assert(jsonResponse.contains("{\"field\":\"name\",\"message\":\"size must be between 5 and 20\"}"));
+		assert(jsonResponse.contains("{\"field\":\"description\",\"message\":\"size must be between 10 and 500\"}"));
+	}
+	
+	@Test
+	@WithMockUser
+	public void testFailWithValidationMessagesIfRequiredFieldsAreNotPresent() throws Exception {
+		
+		MvcResult result = mockMvc.perform(post("/api/projects")
+					.contentType("application/json")
+					.content("{}"))
+				.andExpect(status().is4xxClientError())
+				.andReturn();
+		
+		String jsonResponse = result.getResponse().getContentAsString();
+		
+		assert(jsonResponse.contains("{\"field\":\"name\",\"message\":\"may not be null\"}"));
+		assert(jsonResponse.contains("{\"field\":\"description\",\"message\":\"may not be null\"}"));
 	}
 	
 	@Test
