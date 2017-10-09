@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -24,7 +26,13 @@ public class Lane {
 	@GenericGenerator(name="system-uuid", strategy = "uuid")
 	@Column(name = "uuid", unique = true)
 	private String uuid;
+	
+	@NotNull
+	@Size(min=5, max=20)
 	private String name;
+	
+	@NotNull
+	@Size(min=10, max=500)
 	private String description;
 	
 	@ManyToOne

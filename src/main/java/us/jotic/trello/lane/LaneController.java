@@ -12,6 +12,8 @@ import us.jotic.trello.project.ProjectService;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +35,7 @@ public class LaneController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public Lane saveLane(@PathVariable String projectUuid, @RequestBody Lane lane) {
+	public Lane saveLane(@PathVariable String projectUuid, @Valid @RequestBody Lane lane) {
 		Project project = projectService.getProject(projectUuid);
 		lane.setProject(project);
 		return laneService.create(lane);
