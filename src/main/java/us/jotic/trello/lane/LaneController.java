@@ -2,6 +2,7 @@ package us.jotic.trello.lane;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,7 +38,14 @@ public class LaneController {
 	@RequestMapping(method = RequestMethod.POST)
 	public Lane saveLane(@PathVariable String projectUuid, @Valid @RequestBody Lane lane) {
 		Project project = projectService.getProject(projectUuid);
-		lane.setProject(project);
-		return laneService.create(lane);
+		// set default order/position and create project association
+		return laneService.createNewLane(project, lane);
 	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/reorder")
+	public Lane reorderLanes(@PathVariable String projectUuid, @Valid @RequestBody Lane lane) {
+		// send Lane object with 0 based new position - if it was at 3 set to 0 to move it to 1st
+		return laneService.reorderLanes(projectUuid, lane);
+	}
+	
 }

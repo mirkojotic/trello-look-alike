@@ -28,6 +28,8 @@ public class LaneControllerTest {
 	private MockMvc mockMvc;
 	@Autowired
 	private ProjectService projectService;
+	@Autowired
+	private LaneService laneService;
 	
 	@Test
 	@WithMockUser
@@ -51,6 +53,71 @@ public class LaneControllerTest {
 		assert(laneFromJson.getDescription().equals("Testing, testing"));
 		// assert relationship with project was established
 		assert(laneFromJson.getProject().getUuid().equals(p.getUuid()));
+	}
+	
+	@Test
+	@WithMockUser
+	public void creatingMoreThanOneLaneShouldIncrementLanePosition() throws Exception {
+		// create a project
+		Project project = new Project("Super duper Project", "Some description");
+		Project p = projectService.addProject(project);
+	
+		// create a lane
+		MvcResult result = mockMvc.perform(post("/api/projects/" + p.getUuid() + "/lanes")
+					.contentType("application/json")
+					.content("{\"name\":\"Testing lane 1\",\"description\":\"Testing, testing\"}"))
+				.andExpect(status().is2xxSuccessful())
+				.andReturn();
+		
+		String jsonResponse = result.getResponse().getContentAsString();
+		Lane firstLaneFromJson = new ObjectMapper().readValue(jsonResponse, Lane.class);
+		Integer firstPosition = firstLaneFromJson.getPosition();
+		
+		result = mockMvc.perform(post("/api/projects/" + p.getUuid() + "/lanes")
+					.contentType("application/json")
+					.content("{\"name\":\"Testing lane 2\",\"description\":\"Testing, testing\"}"))
+				.andExpect(status().is2xxSuccessful())
+				.andReturn();
+		
+		jsonResponse = result.getResponse().getContentAsString();
+		Lane secondLaneFromJson = new ObjectMapper().readValue(jsonResponse, Lane.class);
+	
+		assert(firstPosition == (secondLaneFromJson.getPosition() -1));
+	}
+	
+	
+	@Test
+	@WithMockUser
+	public void updatingPositionOfALaneShouldAffectOtherLanes() throws Exception {
+		// create a project
+		Project project = new Project("Super duper Project", "Some description");
+		Project p = projectService.addProject(project);
+		// create a lane
+		Lane lane = new Lane("Name of Lane 1", "Some Description of Lane 1");
+		Lane lane1 = laneService.createNewLane(p, lane);
+		lane = new Lane("Name of Lane 2", "Some Description of Lane 2");
+		Lane lane2 = laneService.createNewLane(project, lane);
+		lane = new Lane("Name of Lane 3", "Some Description of Lane 2");
+		Lane lane3 = laneService.createNewLane(project, lane);
+		
+		assert(lane1.getPosition() == 0);
+		assert(lane2.getPosition() == 1);
+		assert(lane3.getPosition() == 2);
+	
+		String url = "{\"uuid\":\""+lane3.getUuid()+"\",\"position\":0,\"name\":\"Testing lane 3\",\"description\":\"Testing, testing\"}";
+		mockMvc.perform(post("/api/projects/" + p.getUuid() + "/lanes/reorder")
+					.contentType("application/json")
+					.content(url))
+				.andExpect(status().is2xxSuccessful())
+				.andReturn();
+		
+		Lane first = laneService.get(lane1.getUuid());
+		Lane second = laneService.get(lane2.getUuid());
+		Lane third = laneService.get(lane3.getUuid());
+		
+		assert(first.getPosition() == 1);
+		assert(second.getPosition() == 2);
+		assert(third.getPosition() == 0);
 	}
 
 	@Test

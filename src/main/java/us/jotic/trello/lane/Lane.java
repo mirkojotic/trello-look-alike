@@ -37,15 +37,24 @@ public class Lane {
 	
 	@ManyToOne
 	private Project project;
+
+	private Integer position;
 	
 
-	public Lane(String name, String description, Project project) {
+	public Integer getPosition() {
+		return position;
+	}
+
+
+	public void setPosition(Integer position) {
+		this.position = position;
+	}
+
+	public Lane(String name, String description) {
 		super();
 		this.setName(name);
 		this.setDescription(description);
-		this.setProject(project);
 	}
-
 	
 	public Lane() {
 		
@@ -91,6 +100,6 @@ public class Lane {
 	
 	@Override
 	public String toString() {
-		return "Lane [uuid=" + uuid + ", name=" + name + ", description=" + description + "]";
+		return "Lane [uuid=" + uuid + ", name=" + name + ", description=" + description + ", position= " + position +"]";
 	}
 }

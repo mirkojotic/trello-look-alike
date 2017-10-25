@@ -1,27 +1,27 @@
 ----------------------------------------------------------------
-Sun Oct 08 22:25:38 EDT 2017:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.13.1.1 - (1765088): instance a816c00e-015e-fef3-b4f6-0000083f8000 
-on database directory memory:/home/mirko/Desktop/workspace_spring/trello-look-alike/testdb with class loader sun.misc.Launcher$AppClassLoader@34c45dca 
+Wed Oct 25 19:39:37 EDT 2017:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.13.1.1 - (1765088): instance a816c00e-015f-55e7-d426-0000032fccb8 
+on database directory memory:/home/mirko/Desktop/workspace_spring/trello-look-alike/testdb with class loader sun.misc.Launcher$AppClassLoader@723279cf 
 Loaded from file:/home/mirko/.m2/repository/org/apache/derby/derby/10.13.1.1/derby-10.13.1.1.jar
 java.vendor=Oracle Corporation
-java.runtime.version=1.8.0_131-8u131-b11-2ubuntu1.17.04.3-b11
+java.runtime.version=1.8.0_144-b01
 user.dir=/home/mirko/Desktop/workspace_spring/trello-look-alike
 os.name=Linux
 os.arch=amd64
-os.version=4.10.0-35-generic
+os.version=4.10.0-37-generic
 derby.system.home=null
 Database Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
-Sun Oct 08 22:25:52 EDT 2017:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.13.1.1 - (1765088): instance 0963c106-015e-fef3-b4f6-0000083f8000 
-on database directory memory:/home/mirko/Desktop/workspace_spring/trello-look-alike/d7e80506-ba4f-4a43-9cd5-5da4a3cc1e77 with class loader sun.misc.Launcher$AppClassLoader@34c45dca 
+Wed Oct 25 19:40:05 EDT 2017:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.13.1.1 - (1765088): instance 01a54107-015f-55e7-d426-0000032fccb8 
+on database directory memory:/home/mirko/Desktop/workspace_spring/trello-look-alike/d8c71d79-fd2c-475c-999a-fff639f77bab with class loader sun.misc.Launcher$AppClassLoader@723279cf 
 Loaded from file:/home/mirko/.m2/repository/org/apache/derby/derby/10.13.1.1/derby-10.13.1.1.jar
 java.vendor=Oracle Corporation
-java.runtime.version=1.8.0_131-8u131-b11-2ubuntu1.17.04.3-b11
+java.runtime.version=1.8.0_144-b01
 user.dir=/home/mirko/Desktop/workspace_spring/trello-look-alike
 os.name=Linux
 os.arch=amd64
-os.version=4.10.0-35-generic
+os.version=4.10.0-37-generic
 derby.system.home=null
 derby.stream.error.method=org.springframework.jdbc.datasource.embedded.OutputStreamFactory.getNoopOutputStream
 Database Class Loader started - derby.database.classpath=''
